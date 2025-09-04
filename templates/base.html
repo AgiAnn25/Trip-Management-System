@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - Trip Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/feedback.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('destinations') }}">Destinations</a></li>
+                <li><a href="{{ url_for('trips') }}">Trips</a></li>
+                <li><a href="{{ url_for('user_dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('register') }}">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Your Feedback</h2>
+
+        <div class="feedback-container">
+            {% for feedback in feedbacks %}
+            <div class="feedback-card">
+                <h3>Feedback ID: {{ feedback.feedback_id }}</h3>
+                <p>Trip ID: {{ feedback.trip_id }}</p>
+                <p>User ID: {{ feedback.user_id }}</p>
+                <p>Comments: {{ feedback.comments }}</p>
+                <p>Rating: {{ feedback.rating }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <h3>Submit Feedback</h3>
+        <form action="{{ url_for('submit_feedback') }}" method="POST">
+            <label for="trip_id">Trip ID:</label>
+            <input type="text" id="trip_id" name="trip_id" required>
+
+            <label for="comments">Comments:</label>
+            <textarea id="comments" name="comments" rows="4" required></textarea>
+
+            <label for="rating">Rating:</label>
+            <select id="rating" name="rating" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Travel Explorer. All rights reserved.</p>
+    </footer>
+</body>
+</html>

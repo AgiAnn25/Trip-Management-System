@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trips - Travel Explorer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/trips.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet"> <!-- Google Font -->
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{{ url_for('static', filename='app.jpg') }}");
+            background-size: cover;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: rgba(206, 123, 71, 0.9);
+            padding: 10px 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+
+        .title i {
+            margin-right: 8px; /* Space between icon and title */
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #ff7e5f; /* Change color on hover */
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            margin: 20px 0;
+            font-size: 36px;
+            color: #ff7e5f;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            font-family: 'Georgia', serif; /* Changed font style for available trips */
+        }
+
+        .trips-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .trip-card {
+            background: rgba(0, 0, 0, 0.8); /* Darker background */
+            border: 2px solid #ff7e5f; /* Border color */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-family: 'Arial', sans-serif; /* Change font for trip card */
+            display: flex;
+            flex-direction: column; /* Ensure children stack vertically */
+            align-items: center; /* Center align the content */
+            text-align: center; /* Center text */
+        }
+
+        .trip-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .trip-card h3 {
+            font-size: 26px; /* Increased font size */
+            margin-bottom: 10px;
+            color: #ff7e5f;
+            text-transform: uppercase; /* Uppercase heading */
+            font-family: 'Playfair Display', serif; /* Beautiful font for trip names */
+        }
+
+        .trip-card p {
+            margin: 5px 0;
+            line-height: 1.5; /* Improved line height */
+            font-size: 16px; /* Font size for description */
+            font-family: 'Times New Roman', Times, serif; /* Changed font for description */
+        }
+
+        .price-dates {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #ff7e5f; /* Border color for the box */
+            border-radius: 8px; /* Rounded corners */
+            padding: 10px;
+            margin: 10px 0; /* Space around the box */
+            display: flex; /* Flexbox for centering text */
+            flex-direction: column; /* Stack text vertically */
+            align-items: center; /* Center align text */
+            width: 100%; /* Full width of the card */
+        }
+
+        .price-dates p {
+            margin: 5px 0; /* Space between lines */
+            font-size: 18px; /* Font size for price and dates */
+            color: #ff7e5f; /* Text color */
+        }
+
+        .trip-card img {
+            width: 100%; /* Make the image responsive */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 10px; /* Round the corners of the image */
+            margin-bottom: 10px; /* Space between image and text */
+        }
+
+        .btn {
+            background-color: #ff7e5f;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold; /* Bold button text */
+        }
+
+        .btn:hover {
+            background-color: #ff4e50;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: rgba(206, 123, 71, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="title"><i class="ri-briefcase-line"></i>Trip Management System</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}"><i class="ri-home-line"></i></a></li>
+                <li><a href="{{ url_for('destinations') }}"><i class="ri-map-pin-line"></i></a></li>
+                <li><a href="{{ url_for('user_dashboard') }}"><i class="ri-dashboard-line"></i></a></li>
+                <li><a href="{{ url_for('login') }}"><i class="ri-login-box-line"></i></a></li>
+                <li><a href="{{ url_for('register') }}"><i class="ri-user-add-line"></i></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Available Trips</h2>
+
+        <div class="trips-container">
+            {% for trip in trips %}
+            <div class="trip-card">
+                <img src="{{ url_for('static', filename=trip.image) }}" alt="{{ trip.trip_name }}">
+                <h3>{{ trip.trip_name }}</h3>
+                <p>{{ trip.description }}</p>
+                <div class="price-dates">
+                    <p>Price: ${{ trip.price }}</p>
+                    <p>Start Date: {{ trip.start_date }}</p>
+                    <p>End Date: {{ trip.end_date }}</p>
+                </div>
+                <a href="{{ url_for('booking') }}?trip_id={{ trip.trip_id }}" class="btn">Book Now</a>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Travel Explorer. All rights reserved.</p>
+    </footer>
+</body>
+</html>

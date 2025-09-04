@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookings - Travel Explorer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/booking.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{{ url_for('static', filename='app.jpg') }}") no-repeat center center;
+            background-size: cover;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: rgba(206, 123, 71, 0.9);
+            padding: 10px 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+
+        .title i {
+            margin-right: 8px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #ff7e5f;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        h2 {
+            margin: 20px 0;
+            font-size: 36px;
+            color: #ff7e5f;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            font-family: 'Georgia', serif;
+            text-align: center;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: center; /* Center the forms horizontally */
+            margin-top: 30px;
+            gap: 40px; /* Add some spacing between the two forms */
+        }
+
+        .form-container form {
+            width: 40%; /* Reduced the size */
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #ff7e5f;
+            border-radius: 10px;
+            display: none; /* Initially hidden for payment form */
+        }
+
+        /* Show the booking form initially */
+        .form-container #booking-form {
+            display: block;
+        }
+
+        /* Label and input styling */
+        .form-container form label {
+            font-weight: bold;
+            color: #ff7e5f;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .form-container form input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .form-container form input:focus {
+            border-color: #ff7e5f;
+            outline: none;
+        }
+
+        .form-container form button {
+            background-color: #ff7e5f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .form-container form button:hover {
+            background-color: #ff4e50;
+        }
+
+        .booking-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .booking-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff7e5f;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .booking-card h3 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            color: #ff7e5f;
+            text-transform: uppercase;
+            font-family: 'Playfair Display', serif;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: rgba(206, 123, 71, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="title"><i class="ri-briefcase-line"></i>Trip Management System</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}"><i class="ri-home-line"></i>Home</a></li>
+                <li><a href="{{ url_for('destinations') }}"><i class="ri-map-pin-line"></i>Destinations</a></li>
+                <li><a href="{{ url_for('user_dashboard') }}"><i class="ri-dashboard-line"></i>Dashboard</a></li>
+                <li><a href="{{ url_for('login') }}"><i class="ri-login-box-line"></i>Login</a></li>
+                <li><a href="{{ url_for('register') }}"><i class="ri-user-add-line"></i>Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Your Bookings</h2>
+
+        <div class="booking-container">
+            {% for booking in bookings %}
+            <div class="booking-card">
+                <h3>Booking ID: {{ booking.booking_id }}</h3>
+                <p>User ID: {{ booking.user_id }}</p>
+                <p>Booking Date: {{ booking.booking_date }}</p>
+                <p>No. of Seats: {{ booking.no_of_seats }}</p>
+                <p>Total Amount: ${{ booking.total_amount }}</p>
+                <p>Status: {{ booking.status }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="form-container">
+            <!-- Booking Form -->
+            <form id="booking-form" action="{{ url_for('booking', trip_id=trip_id) }}" method="POST">
+                <h3>Book a Trip: {{ trip_name }}</h3>
+
+                <div>
+                    <label for="booking_date">Booking Date:</label>
+                    <input type="date" id="booking_date" name="booking_date" required>
+                </div>
+
+                <div>
+                    <label for="no_of_seats">Number of Seats:</label>
+                    <input type="number" id="no_of_seats" name="no_of_seats" min="1" required>
+                </div>
+
+                <div>
+                    <p>Price per seat: $<span id="trip_price">{{ trip_price }}</span></p>
+                </div>
+
+                <div>
+                    <p>Total Price: $<span id="total_price">0</span></p>
+                </div>
+
+                <button type="submit">Confirm Booking</button>
+            </form>
+
+            <!-- Payment Form (hidden initially) -->
+            <form id="payment-form" action="{{ url_for('make_payment') }}" method="POST">
+                <h3>Payment Information</h3>
+                <label for="card_number">Card Number:</label>
+                <input type="text" id="card_number" name="card_number" required placeholder="1234 5678 9012 3456">
+
+                <label for="expiry_date">Expiry Date:</label>
+                <input type="text" id="expiry_date" name="expiry_date" required placeholder="MM/YY">
+
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" name="cvv" required placeholder="123">
+
+                <button type="submit">Pay Now</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>Travel Explorer © 2024</p>
+    </footer>
+
+    <script>
+        // Calculate total price based on number of seats
+        const seatsInput = document.getElementById('no_of_seats');
+        const tripPrice = parseFloat(document.getElementById('trip_price').textContent);
+        const totalPriceSpan = document.getElementById('total_price');
+
+        seatsInput.addEventListener('input', function() {
+            const numberOfSeats = parseInt(seatsInput.value) || 0;
+            const totalPrice = (numberOfSeats * tripPrice).toFixed(2);
+            totalPriceSpan.textContent = totalPrice;
+        });
+
+        // Show the payment form after successful booking
+        document.getElementById('booking-form').onsubmit = function() {
+            // Hide booking form and show payment form (you can add more logic as needed)
+            document.getElementById('booking-form').style.display = 'none';
+            document.getElementById('payment-form').style.display = 'block';
+            return false; // Prevent form submission for demo purposes
+        };
+    </script>
+</body>
+</html>
