@@ -67,7 +67,7 @@ Update your database credentials in app.py if necessary.
 
 5️⃣ Run the Application
 
-python app.py
+python app.py,
 The application will start on 👉 http://127.0.0.1:5000
 
 License
