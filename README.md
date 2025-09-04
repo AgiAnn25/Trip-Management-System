@@ -44,10 +44,10 @@ cd trip-management-system
 
 2️⃣ Create & Activate Virtual Environment (Recommended)
 
-# Create virtual environment
+### Create virtual environment
 python -m venv venv
 
-# Activate it
+### Activate it
 venv\Scripts\activate      # For Windows
 source venv/bin/activate   # For Mac/Linux
 
